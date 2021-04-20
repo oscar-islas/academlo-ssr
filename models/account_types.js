@@ -3,23 +3,20 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class account_types extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class AccountTypes extends Model {
+
     static associate(models) {
       // define association here
     }
   };
-  account_types.init({
+  AccountTypes.init({
     name: DataTypes.STRING,
     description: DataTypes.STRING
   }, {
     sequelize,
     underscored: true,
-    modelName: 'account_types',
+    modelName: 'AccountTypes',
+    tableName: "account_types"
   });
-  return account_types;
+  return AccountTypes;
 };
