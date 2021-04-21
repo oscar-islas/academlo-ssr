@@ -4,11 +4,14 @@ require('dotenv').config();
 // const dotenv = require('dotenv');
 // dotenv.config();
 
+
 const express = require('express');
 //Importar un módelo de base de datos
 const {AccountTypes} = require('./models');
 
 const app = express();
+app.set('view engine', 'ejs');
+
 //CRUD -> Create, Read, Update y Delete
 
 //Para poder leer los datos que envía el cliente con el formato URL Encoded
@@ -22,8 +25,11 @@ app.get("/", (req, res) => {
 //Read
 app.get("/account_types", async (req, res) => {
     let results = await AccountTypes.findAll({raw: true});
-    console.log(results);
-    res.send("Tipos de cuentas");
+    res.render('account_types', {accountTypes: results });
+});
+
+app.get("/clients", async (req, res) => {
+    res.render('clients');
 });
 
 //Create
