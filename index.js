@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const express = require('express');
 //Importar un módelo de base de datos
-const {AccountTypes} = require('./models');
+const {AccountTypes, clients:Clients, accounts: Accounts} = require('./models');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -24,11 +24,20 @@ app.get("/", (req, res) => {
 
 //Read
 app.get("/account_types", async (req, res) => {
-    let results = await AccountTypes.findAll({raw: true});
-    res.render('account_types', {accountTypes: results });
+    let accountTypes = await AccountTypes.findAll({include: [{model: accounts}]});
+    res.send(JSON.stringify(accountTypes.map( account => account.get({plain: true}))));
+    // res.render('account_types', {accountTypes: results });
+});
+
+app.get('/accounts', async (req, res) => {
+    let accounts = await Accounts.findAll({include: [{model: AccountTypes}, {model: Clients}]  });
+    res.send(JSON.stringify(accounts));
+    // res.render('accounts', {accounts: results });
 });
 
 app.get("/clients", async (req, res) => {
+    let clients = await Clients.findAll({include: [{model: accounts}]});
+    console.log(JSON.stringify(clients.map( client => client.get({plain: true}))));
     res.render('clients');
 });
 

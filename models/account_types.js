@@ -4,9 +4,10 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class AccountTypes extends Model {
-
     static associate(models) {
-      // define association here
+      this.hasMany(models.accounts, {
+        foreignKey: 'type'
+      });
     }
   };
   AccountTypes.init({
@@ -16,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     underscored: true,
     modelName: 'AccountTypes',
-    tableName: "account_types"
+    tableName: "account_types",
+    timestamps: false
   });
   return AccountTypes;
 };
