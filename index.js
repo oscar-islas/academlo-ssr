@@ -1,9 +1,7 @@
 //Dos formas para poder utilizar dotenv
 require('dotenv').config();
-
-// const dotenv = require('dotenv');
-// dotenv.config();
-
+const {getAccountTypes} = require('./controllers/accountTypes');
+const {getAccounts} = require('./controllers/accounts');
 
 const express = require('express');
 //Importar un módelo de base de datos
@@ -23,39 +21,15 @@ app.get("/", (req, res) => {
 });
 
 //Read
-app.get("/account_types", async (req, res) => {
-    let accountTypes = await AccountTypes.findAll({include: [{model: accounts}]});
-    res.send(JSON.stringify(accountTypes.map( account => account.get({plain: true}))));
-    // res.render('account_types', {accountTypes: results });
-});
+app.get("/account_types", getAccountTypes);
 
-app.get('/accounts', async (req, res) => {
-    let accounts = await Accounts.findAll({include: [{model: AccountTypes}, {model: Clients}]  });
-    res.send(JSON.stringify(accounts));
-    // res.render('accounts', {accounts: results });
-});
+app.get('/accounts', getAccounts);
 
 app.get("/clients", async (req, res) => {
-    let clients = await Clients.findAll({include: [{model: accounts}]});
-    console.log(JSON.stringify(clients.map( client => client.get({plain: true}))));
-    res.render('clients');
+    let clients = await Clients.findAll({include: [{model: Accounts}]});
+    clients = clients.map( client => client.get({plain: true}));
+    res.render('clients', {clients});
 });
-
-//Create
-app.post("/account_types", async (req, res) => {
-    //sacar los datos que me está enviando el cliente
-    const {name, description, created_at, update_at} = req.body; //desestructuración
-    try{
-        //Creamos un registro en la tabla account_types
-        let results = await AccountTypes.create({name, description});
-        //Enviamos un respuesta satisfactoria
-        res.send("Se ha agregado un tipo cuenta");
-    }catch(error){
-        console.log(error);
-        res.status(400).send("No se ha podido agregar el tipo de cuenta");
-    }
-});
-
 
 const PORT = process.env.PORT || 8080;
 

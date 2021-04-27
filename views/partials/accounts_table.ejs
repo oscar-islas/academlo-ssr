@@ -13,9 +13,15 @@
             <tr>
                 <th scope="row"><%= account.id %></th>
                 <td><%= account.account_no %></td>
-                <td><%= account.client.first_name %> <%= account.client.last_name %></td>
+                <% if(account.Client) { %>
+                <td><%= account.Client.first_name %> <%= account.Client.last_name %></td>
+                <% } else { %>
+                <td> - </td>
+                <% } %>
                 <td><%= account.balance %></td>
+                <% if(account.AccountType) { %>
                 <td><%= account.AccountType.name %></td>
+                <% } %>
             </tr>
         <% }) %>
     </tbody>

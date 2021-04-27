@@ -3,6 +3,12 @@
 <%- include('partials/header'); -%>
 <body>
     <h1>Vista de cliente</h1>
+    <% clients.forEach((client) => {  %>
+        <h1><%= client.first_name %></h1>
+        <% client.accounts.forEach((account) => {  %>
+            <h4><%= account.account_no %></h4>
+        <% }); %>
+    <% }); %>
     <%- include('partials/footer'); -%>
 </body>
 </html>
